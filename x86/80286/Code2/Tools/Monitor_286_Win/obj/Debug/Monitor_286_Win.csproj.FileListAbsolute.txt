@@ -1,0 +1,33 @@
+C:\Users\rich\source\repos\Monitor_286_Win\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.AssemblyReference.cache
+C:\Users\rich\source\repos\Monitor_286_Win\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.SuggestedBindingRedirects.cache
+C:\Users\rich\source\repos\Monitor_286_Win\Monitor_286_Win\obj\Debug\Monitor_286_Win.mainForm.resources
+C:\Users\rich\source\repos\Monitor_286_Win\Monitor_286_Win\obj\Debug\Monitor_286_Win.Properties.Resources.resources
+C:\Users\rich\source\repos\Monitor_286_Win\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.GenerateResource.cache
+C:\Users\rich\source\repos\Monitor_286_Win\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.CoreCompileInputs.cache
+C:\Users\rich\source\repos\Monitor_286_Win\Monitor_286_Win\bin\Debug\Monitor_286_Win.exe.config
+C:\Users\rich\source\repos\Monitor_286_Win\Monitor_286_Win\bin\Debug\Monitor_286_Win.exe
+C:\Users\rich\source\repos\Monitor_286_Win\Monitor_286_Win\bin\Debug\Monitor_286_Win.pdb
+C:\Users\rich\source\repos\Monitor_286_Win\Monitor_286_Win\obj\Debug\Monitor_286_Win.exe
+C:\Users\rich\source\repos\Monitor_286_Win\Monitor_286_Win\obj\Debug\Monitor_286_Win.pdb
+C:\Users\Dominic\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\bin\Debug\Monitor_286_Win.exe.config
+C:\Users\Dominic\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\bin\Debug\Monitor_286_Win.exe
+C:\Users\Dominic\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\bin\Debug\Monitor_286_Win.pdb
+C:\Users\Dominic\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.AssemblyReference.cache
+C:\Users\Dominic\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.SuggestedBindingRedirects.cache
+C:\Users\Dominic\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.mainForm.resources
+C:\Users\Dominic\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.Properties.Resources.resources
+C:\Users\Dominic\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.GenerateResource.cache
+C:\Users\Dominic\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.CoreCompileInputs.cache
+C:\Users\Dominic\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.exe
+C:\Users\Dominic\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.pdb
+C:\Users\Dom\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\bin\Debug\Monitor_286_Win.exe.config
+C:\Users\Dom\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\bin\Debug\Monitor_286_Win.exe
+C:\Users\Dom\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\bin\Debug\Monitor_286_Win.pdb
+C:\Users\Dom\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.AssemblyReference.cache
+C:\Users\Dom\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.SuggestedBindingRedirects.cache
+C:\Users\Dom\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.mainForm.resources
+C:\Users\Dom\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.Properties.Resources.resources
+C:\Users\Dom\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.GenerateResource.cache
+C:\Users\Dom\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.csproj.CoreCompileInputs.cache
+C:\Users\Dom\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.exe
+C:\Users\Dom\OneDrive\Projets\Intel 80286\Code\Tools\Monitor_286_Win\obj\Debug\Monitor_286_Win.pdb
