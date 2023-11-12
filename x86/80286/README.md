@@ -4,6 +4,7 @@ This is the repo for my homebrew 80286 hobbyist computer.
 
 ![homebrew 80286](Project_Banner.jpg)
 
+## Follow the project
 You can follow the project developpement on my website :
 https://dominicemond.wordpress.com/category/homebrew-computers/intel-80286/
 
