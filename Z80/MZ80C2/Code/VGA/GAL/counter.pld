@@ -1,0 +1,112 @@
+Name        Counter;
+Partno      MZ80;
+Date        07-06-2020;
+Revision    01;
+Designer    Dominic Emond-Belanger;
+Company     na;
+Assembly    Z80 Computer;
+Location    TBD;
+Device      g20v8a;
+
+/*****************************************************
+ Function table
+
+ !PE  !CEP  !CET  UP   CLK    Function
+ -------------------------------------------------
+  L     X     X    X    ^     Parallel load
+  H     H     L    X    ^     Hold
+  H     X     H    X    ^     Hold (!TC held high)
+  H     L     L    H    ^     Count up
+  H     L     L    L    ^     Count down
+
+******************************************************/
+
+/********************************************************************
+                               ______________				*
+                              |   Counter    |				*
+                      CLK x---|1  I        24|---x Vcc              	*       
+                       D0 x---|2  I     I  23|---x NC              	*       
+                       D1 x---|3  I     O  22|---x Q2              	*        
+                       D2 x---|4  I     O  21|---x Q3               	*       
+                       D3 x---|5  I     O  20|---x Q5               	*      
+                       D4 x---|6  I     O  19|---x NC               	*      
+                       D5 x---|7  I     O  18|---x !TC              	*      
+                       NC x---|8  I     O  17|---x Q1               	*      
+                       UP x---|9  I     O  16|---x Q0               	*      
+                     !CEP x---|10 I     O  15|---x Q4              	*      
+                     !CET x---|11 I     I  14|---x NC               	*      
+                      GND x---|12       I  13|---x !PE              	*
+                              |______________|				*
+										*
+ ********************************************************************/
+
+/** Inputs **/
+Pin 1 = CLK;
+Pin 2 = D0;
+Pin 3 = D1;
+Pin 4 = D2;
+Pin 5 = D3;
+Pin 6 = D4;
+Pin 7 = D5;
+Pin 10 = !CEP;
+Pin 11 = !CET;
+Pin 13 = !PE;
+Pin 14 = UP;
+Pin 18 = !TC;
+
+/** Outputs **/
+Pin 20 = Q5;
+Pin 15 = Q4;
+Pin 21 = Q3;
+Pin 22 = Q2;
+Pin 17 = Q1;
+Pin 16 = Q0;
+
+hold = !PE & (CET & !CEP # !CET);
+
+/*
+  Each bit is toggled if we are not holding and:
+     if we're counting up, all lower bits are high, or
+     if we're counting down, all lower bits are low.
+*/
+
+/*
+tog0 = !hold & (UP # !UP);
+tog1 = !hold & (UP & Q0 # !UP & !Q0);
+tog2 = !hold & (UP & Q1 & Q0 # !UP & !Q1 & !Q0);
+tog3 = !hold & (UP & Q2 & Q1 & Q0 # !UP & !Q2 & !Q1 & !Q0);
+tog4 = !hold & (UP & Q3 & Q2 & Q1 & Q0 # !UP & !Q3 & !Q2 & !Q1 & !Q0);
+tog5 = !hold & (UP & Q4 & Q3 & Q2 & Q1 & Q0 # !UP & !Q4 & !Q3 & !Q2 & !Q1 & !Q0);
+tog6 = !hold & (UP & Q5 & Q4 & Q3 & Q2 & Q1 & Q0 # !UP & !Q5 & !Q4 & !Q3 & !Q2 & !Q1 & !Q0);
+tog7 = !hold & (UP & Q6 & Q5 & Q4 & Q3 & Q2 & Q1 & Q0 # !UP & !Q6 & !Q5 & !Q4 & !Q3 & !Q2 & !Q1 & !Q0);
+*/
+
+/*
+  If we're loading, load the bits. Otherwise:
+    If we're not toggling, keep the bit the same, otherwise toggle the bit.
+*/
+
+Q0 = D0 & PE # !PE & Q0 # !PE & !Q0;
+Q1 = D1 & PE # !PE & Q1 # !PE & !Q1;
+Q2 = D2 & PE # !PE & Q2 # !PE & !Q2;
+Q3 = D3 & PE # !PE & Q3 # !PE & !Q3;
+/*
+Q4.D = D4 & PE # !PE & !tog4 & Q4 # !PE & tog4 & !Q4;
+Q5.D = D5 & PE # !PE & !tog5 & Q5 # !PE & tog5 & !Q5;
+Q6.D = D6 & PE # !PE & !tog6 & Q6 # !PE & tog6 & !Q6;
+Q7.D = D7 & PE # !PE & !tog7 & Q7 # !PE & tog7 & !Q7;
+*/
+FIELD count = [Q3..Q0];
+
+/*
+  TC must be low (that is, !TC must be high) when !CET & !PE. Otherwise,
+  TC is set (that is, !TC is reset) if we've reached a terminal count.
+  A terminal count is FF if we're counting up, or 00 if we're counting
+  down.
+
+  The TC signal is pretty weird. Not surprising that they
+  obsoleted the 74269.
+*/
+
+termcount = UP & count:'h'FF # !UP & count:'h'00;
+TC = (CET # PE) & termcount;
