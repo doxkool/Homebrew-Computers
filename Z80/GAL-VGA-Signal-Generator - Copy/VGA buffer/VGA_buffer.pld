@@ -1,0 +1,53 @@
+Name        9bits_counter;
+Date 		20-jul-2020;
+Revision 	01;
+Designer 	Dominic Emond-B.;
+Date        07/23/17;
+Device      g20v8a;
+
+/*
+                               ______________
+                              |    Buffer    |
+                   Hblank x---|1           24|---x Vcc                      
+                      IR0 x---|2           23|---x NC                       
+                      IR1 x---|3           22|---x R0                       
+                      IG0 x---|4           21|---x R1                       
+                      IG1 x---|5           20|---x G0                       
+                      IB0 x---|6           19|---x G1                       
+                      IB1 x---|7           18|---x B0                       
+                       NC x---|8           17|---x B1                      
+                       NC x---|9           16|---x NC                       
+                       NC x---|10          15|---x NC                      
+                   Vblank x---|11          14|---x NC                       
+                      GND x---|12          13|---x !PE                      
+                              |______________|
+
+ */
+
+/* INPUT */
+
+Pin 1 = Hblank;
+Pin 2 = IR0;
+Pin 3 = IR1;
+Pin 4 = IG0;
+Pin 5 = IG1;
+Pin 6 = IB0;
+Pin 7 = IB1;
+Pin 11 = Vblank;
+
+/* OUTPUT */
+
+Pin 22 = R0;
+Pin 21 = R1;
+Pin 20 = G0;
+Pin 19 = G1;
+Pin 18 = B0;
+Pin 17 = B1;
+
+
+R0 = !Hblank & !Vblank & IR0;
+R1 = !Hblank & !Vblank & IR1;
+G0 = !Hblank & !Vblank & IG0;
+G1 = !Hblank & !Vblank & IG1;
+B0 = !Hblank & !Vblank & IB0;
+B1 = !Hblank & !Vblank & IB1;

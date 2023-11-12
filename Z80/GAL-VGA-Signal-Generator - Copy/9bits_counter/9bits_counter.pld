@@ -1,0 +1,131 @@
+Name        9bits_counter;
+Date 		20-jul-2020;
+Revision 	01;
+Designer 	Dominic Emond-B.;
+Device      g22v10;
+
+/*
+                               ______________
+                              |   Counter    |
+                      CLK x---|1           24|---x Vcc                      
+                       NC x---|2           23|---x Q0                       
+                       NC x---|3           22|---x Q1                       
+                       NC x---|4           21|---x Q2                       
+                       NC x---|5           20|---x Q3                       
+                       NC x---|6           19|---x Q9                       
+                       NC x---|7           18|---x Q8                       
+                       NC x---|8           17|---x Q6                       
+                       NC x---|9           16|---x Q7                       
+                       NC x---|10          15|---x Q5                      
+                      CLR x---|11          14|---x Q4                       
+                      GND x---|12          13|---x !PE                      
+                              |______________|
+
+ */
+
+Pin 1 = CLK;
+Pin 23 = Q0;
+Pin 22 = Q1;
+Pin 21 = Q2;
+Pin 20 = Q3;
+Pin 14 = Q4;
+Pin 15 = Q5;
+Pin 17 = Q6;
+Pin 16 = Q7;
+Pin 18 = Q8;
+Pin 19 = Q9;
+/*Pin 15 = CO;*/
+Pin 11 = CLR;
+Pin 13 = !PE;
+
+
+Q0.d  =
+!CLR & !Q0;
+
+Q1.d  = 
+!CLR & (!Q0 & Q1 
+# Q0 & !Q1);
+
+Q2.d  = 
+!CLR & (!Q0 & Q1 & Q2 
+# Q0 & Q1 & !Q2 
+# !Q1 & Q2);
+
+Q3.d  = 
+!CLR & (!Q0 & Q1 & Q2 & Q3
+# Q0 & Q1 & Q2 & !Q3
+# !Q1 & Q2 & Q3
+# !Q2 & Q3);
+
+Q4.d  =
+!CLR & (!Q0 & Q1 & Q2 & Q3 & Q4
+# Q0 & Q1 & Q2 & Q3 & !Q4
+# Q1 & Q2 & !Q3 & Q4
+# !Q2 & Q4
+# !Q1 & Q2 & Q4);
+
+Q5.d  =
+!CLR & (!Q0 & Q1 & Q2 & Q3 & Q4 & Q5
+# Q0 & Q1 & Q2 & Q3 & Q4 & !Q5
+# Q1 & Q2 & Q3 & !Q4 & Q5
+# !Q3 & Q5
+# Q1 & !Q2 & Q3 & Q5
+# !Q1 & Q3 & Q5);
+
+Q6.d  =
+!CLR & (!Q0 & Q1 & Q2 & Q3 & Q4 & Q5 & Q6
+# Q0 & Q1 & Q2 & Q3 & Q4 & Q5 & !Q6
+# Q1 & Q2 & Q3 & Q4 & !Q5 & Q6
+# !Q2 & Q3 & Q6
+# !Q3 & Q6
+# Q1 & Q2 & Q3 & !Q4 & Q6
+# !Q1 & Q2 & Q3 & Q6);
+
+Q7.d  =
+!CLR & (!Q0 & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 & Q7
+# Q0 & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 & !Q7
+# Q1 & Q2 & Q3 & Q4 & Q5 & !Q6 & Q7
+# !Q2 & Q4 & Q7
+# !Q3 & !Q4 & Q7
+# Q1 & Q2 & Q3 & Q4 & !Q5 & Q7
+# Q2 & !Q3 & Q4 & Q7
+# !Q2 & Q3 & !Q4 & Q7
+# !Q1 & Q2 & Q3 & Q7
+# Q1 & Q2 & Q3 & !Q4 & Q7);
+
+Q8.d  =
+!CLR & (!Q0 & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 & Q7 & Q8
+# Q0 & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 & Q7 & !Q8
+# Q1 & Q2 & Q3 & Q4 & Q5 & Q6 & !Q7 & Q8
+# !Q1 & Q3 & Q4 & Q8
+# !Q3 & !Q4 & !Q5 & Q8
+# Q1 & Q2 & Q3 & Q4 & Q5 & !Q6 & Q8
+# Q2 & !Q3 & !Q4 & Q5 & Q8
+# !Q2 & Q3 & !Q4 & !Q5 & Q8
+# !Q2 & !Q4 & Q5 & Q8
+# Q2 & Q3 & !Q4 & Q8
+# Q1 & Q2 & Q3 & Q4 & !Q5 & Q8
+# !Q3 & Q4 & Q8
+# Q1 & !Q2 & Q3 & Q4 & Q8);
+
+Q9.d  =
+!CLR & (!Q0 & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 & Q7 & Q8 & Q9
+# Q0 & Q1 & Q2 & Q3 & Q4 & Q5 & Q6 & Q7 & Q8 & !Q9
+# Q1 & Q2 & Q3 & Q4 & Q5 & Q6 & Q7 & !Q8 & Q9
+# !Q1 & Q2 & Q3 & Q4 & Q9
+# !Q3 & !Q4 & !Q5 & !Q6 & Q9
+# Q1 & Q2 & Q3 & Q4 & Q5 & Q6 & !Q7 & Q9
+# Q2 & !Q3 & !Q4 & !Q5 & Q6 & Q9
+# !Q2 & Q3 & !Q4 & !Q5 & !Q6 & Q9
+# !Q2 & !Q4 & !Q5 & Q6 & Q9
+# Q2 & Q3 & !Q4 & !Q5 & Q9
+# Q1 & Q2 & Q3 & Q4 & Q5 & !Q6 & Q9
+# !Q3 & Q4 & !Q5 & Q9
+# Q3 & !Q4 & Q5 & Q9
+# !Q3 & Q5 & Q9
+# Q1 & Q2 & Q3 & Q4 & !Q5 & Q9
+# !Q2 & Q3 & Q4 & Q9);
+ 
+
+
+

@@ -1,0 +1,40 @@
+%SIGNAL
+PIN  18 =  B0 
+PIN  17 =  B1 
+PIN  20 =  G0 
+PIN  19 =  G1 
+PIN   1 =  Hblank 
+PIN   6 =  IB0 
+PIN   7 =  IB1 
+PIN   4 =  IG0 
+PIN   5 =  IG1 
+PIN   2 =  IR0 
+PIN   3 =  IR1 
+PIN  22 =  R0 
+PIN  21 =  R1 
+PIN  11 =  Vblank 
+%END
+
+%FIELD
+%END
+
+%EQUATION
+B0 =>
+    !Hblank & IB0 & !Vblank
+
+B1 =>
+    !Hblank & IB1 & !Vblank
+
+G0 =>
+    !Hblank & IG0 & !Vblank
+
+G1 =>
+    !Hblank & IG1 & !Vblank
+
+R0 =>
+    !Hblank & IR0 & !Vblank
+
+R1 =>
+    !Hblank & IR1 & !Vblank
+
+%END
