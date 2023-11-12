@@ -1,9 +1,9 @@
 # Excluded projects folders
 Datasheet
 .vs
-Arduino
-Photos
-Project requirements
+Arduino/*
+Photos/*
+Project requirements/*
 
 Code/Scripts/*
 Code/Tools/*
