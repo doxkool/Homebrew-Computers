@@ -1,0 +1,71 @@
+Name     ZoniX_Mem_Decoder_and_Ext_Addr_Logic;
+PartNo   N/A;
+Date     20-Sept-2020;
+Revision 01;
+Designer Dominic Emond-Belanger;
+Company  N/A;
+Assembly Z80 Computer;
+Location TBD;
+Device   g22v10;
+
+
+/** ZoniX Memory Decoder + Extended Addr Logic ******************
+ *                 ______________
+ *                |Memory Decoder|
+ *        CLK x---|1  I        24|---x Vcc
+ *     CFG_Q0 x---|2  I      O 23|---x NC
+ *     CFG_Q1 x---|3  I      O 22|---x CS_CFG1
+ *     CFG_Q2 x---|4  I      O 21|---x CS_CFG2	
+ *     CFG_Q3 x---|5  I      O 20|---x A14_RAM
+ *     CS_CFG x---|6  I      O 19|---x A16_RAM
+ *         A1 x---|7  I      O 18|---x A17_RAM
+ *         A2 x---|8  I      O 17|---x A18_RAM
+ *        A14 x---|9  I      O 16|---x NC
+ *        A15 x---|10 I      O 15|---x CS_RAM
+ *     ROM_EN x---|11 I      O 14|---x CS_ROM
+ *        GND x---|12        I 13|---x MREQ
+ *                |______________|
+ *
+ ****************************************************************/
+
+/*** Inputs ***/
+PIN 1		= CLK;
+PIN 2		= CFG_Q0;
+PIN 3		= CFG_Q1;
+PIN 4		= CFG_Q2;
+PIN 5		= CFG_Q3;                 
+PIN 6		= CS_CFG;
+PIN 7		= A1;
+PIN 8		= A2;
+PIN 9		= A14;
+PIN 10		= A15;
+PIN 11		= ROM_EN;
+PIN 13		= MREQ;
+
+/*** Outputs ***/
+PIN 22		= CS_CFG1;
+PIN 21		= CS_CFG2;
+PIN 20		= A15_RAM;
+PIN 19 	= A16_RAM;
+PIN 18 	= A17_RAM;
+PIN 17 	= A18_RAM;
+PIN 15 	= CS_RAM;
+PIN 14 	= CS_ROM;
+
+/*** Logic Equations ***/
+
+/* RAM/ROM Selection */
+CS_RAM		= (A15 # MREQ);
+CS_ROM		= ((A15 # ROM_EN) # MREQ);
+
+/* CFG Selection */
+CS_CFG1	= !(!A1 & !A2 & !CS_CFG);
+CS_CFG2	= !(!A1 & A2 & !CS_CFG);
+
+/* Extended Addr Logic */
+/*A15_RAM	= ((A14 & A15) # CFG_Q0);*/
+/*A16_RAM	= ((A14 & A15) # CFG_Q1);*/
+/*A17_RAM	= ((A14 & A15) # CFG_Q2);*/
+/*A18_RAM	= ((A14 & A15) # CFG_Q3);*/
+
+A15_RAM	= A15;

@@ -1,0 +1,70 @@
+Name     ZoniX_DATA_FLOW_DIR;
+PartNo   N/A;
+Date     20-Sept-2020;
+Revision 01;
+Designer Dominic Emond-Belanger;
+Company  N/A;
+Assembly Z80 Computer;
+Location TBD;
+Device   g22v10;
+
+
+/** ZoniX IO Addr Decoder + Data Flow Drirection ****************
+ *                 ______________
+ *                |  IO Decoder  |
+ *        CLK x---|1  I        24|---x Vcc
+ *       MREQ x---|2  I      O 23|---x CS_KIO
+ *       IORQ x---|3  I      O 22|---x CS_OPT0
+ *         RD x---|4  I      O 21|---x CS_OPT1	
+ *      BUSAK x---|5  I      O 20|---x CS_OPT2
+ *         A3 x---|6  I      O 19|---x DATA_DIR
+ *         A4 x---|7  I      O 18|---x IOSEL
+ *         A5 x---|8  I      O 17|---x NMI
+ *         A6 x---|9  I      O 16|---x NC
+ *         A7 x---|10 I      O 15|---x NC
+ *      B_NMI x---|11 I      O 14|---x NC
+ *        GND x---|12        I 13|---x M1
+ *                |______________|
+ *
+ ****************************************************************/
+
+/*** Inputs ***/
+PIN 1		= CLK;
+PIN 2		= MREQ;
+PIN 3		= IORQ;
+PIN 4		= RD;
+PIN 5		= BUSAK;                 
+PIN 6		= A3;
+PIN 7		= A4;
+PIN 8		= A5;
+PIN 9		= A6;
+PIN 10		= A7;
+PIN 11		= B_NMI;
+PIN 13		= M1;
+
+/*** Outputs ***/
+PIN 23		= CS_KIO;
+PIN 22		= CS_OPT0;
+PIN 21		= CS_OPT1;
+PIN 20		= CS_OPT2;
+PIN 19 	= DATA_DIR;
+PIN 18 	= IOSEL;
+PIN 17 	= NMI;
+
+/*** Logic Equations ***/
+
+NAND1 		= (!(M1 & A5 & A6) # A7);
+NAND2		= !(M1 & BUSAK & RD);
+
+/* IO Selection */
+IOSEL		= NAND1 # !IORQ;
+/*CS_KIO		= !(!A3 & !A4 & IOSEL);*/
+CS_OPT0	= !(A3 & !A4 & IOSEL);
+/*CS_OPT1	= !(!A3 & A4 & IOSEL);*/
+/*CS_OPT2	= !(A3 & A4 & IOSEL);*/
+
+/* Data Direction Selection */
+DATA_DIR	= (((NAND1 # IORQ) & MREQ) # RD) & NAND2;
+
+/* NMI to BUS Isolation */
+NMI		= B_NMI;

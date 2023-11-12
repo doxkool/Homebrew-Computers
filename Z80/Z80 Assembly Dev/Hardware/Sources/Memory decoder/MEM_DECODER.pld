@@ -1,0 +1,58 @@
+Name     Memory_Decoder;
+PartNo   N/A;
+Date     01-Jan-2021;
+Revision 01;
+Designer Dominic Emond-Belanger;
+Company  N/A;
+Assembly Z80 Computer;
+Location TBD;
+Device   g20v8a;
+
+
+/***************** Memory Decoder ********************************
+ *                 ______________
+ *                |Memory Decoder|
+ *        CLK x---|1  I     5v 24|---x Vcc
+ *         WR x---|2  I      O 23|---x NC
+ *         RD x---|3  I      O 22|---x MEMWR
+ *       MREQ x---|4  I      O 21|---x MEMRD	
+ *         NC x---|5  I      O 20|---x CS_FLASH
+ *        A13 x---|6  I      O 19|---x CS_RAM
+ *        A14 x---|7  I      O 18|---x NC
+ *        A15 x---|8  I      O 17|---x WR_FLASH
+ *         NC x---|9  I      O 16|---x NC
+ *      FLASH x---|10 I      O 15|---x NC
+ *         NC x---|11 I      O 14|---x NC
+ *        GND x---|12 G      I 13|---x NC
+ *                |______________|
+ *
+ ****************************************************************/
+
+/*** Inputs ***/
+PIN 1		= CLK;
+PIN 2		= WR;
+PIN 3		= RD;
+PIN 4		= MREQ;                 
+PIN 6		= A13;
+PIN 7		= A14;
+PIN 8		= A15;
+PIN 10		= FLASH;
+
+/*** Outputs ***/
+PIN 22		= MEMWR;
+PIN 21		= MEMRD;
+PIN 20		= CS_FLASH;
+PIN 19 	= CS_RAM;
+PIN 17		= WR_FLASH;
+
+/*** Logic Equations ***/
+
+/* Read or Write from/to memory */
+MEMRD		= MREQ # RD;
+MEMWR		= MREQ # WR;
+
+/* RAM/ROM Selection */
+CS_FLASH	= A15 # (A13 # A14) # MREQ;
+CS_RAM		= !(A15 # (A13 # A14)) # MREQ;
+
+WR_FLASH	= 

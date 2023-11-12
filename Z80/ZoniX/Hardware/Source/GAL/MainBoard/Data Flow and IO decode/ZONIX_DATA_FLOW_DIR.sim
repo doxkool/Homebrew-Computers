@@ -1,0 +1,70 @@
+%SIGNAL
+PIN   6 =  A3 
+PIN   7 =  A4 
+PIN   8 =  A5 
+PIN   9 =  A6 
+PIN  10 =  A7 
+PIN   5 =  BUSAK 
+PIN  11 =  B_NMI 
+PIN   1 =  CLK 
+PIN  23 =  CS_KIO 
+PIN  22 =  CS_OPT0 
+PIN  21 =  CS_OPT1 
+PIN  20 =  CS_OPT2 
+PIN  19 =  DATA_DIR 
+PIN   3 =  IORQ 
+PIN  18 =  IOSEL 
+PIN  13 =  M1 
+PIN   2 =  MREQ 
+PIN  17 =  NMI 
+PIN   4 =  RD 
+%END
+
+%FIELD
+%END
+
+%EQUATION
+DATA_DIR =>
+    !M1 & RD
+  # !M1 & MREQ
+  # !BUSAK & RD
+  # !BUSAK & IORQ & MREQ
+  # A7 & !BUSAK & MREQ
+  # !A6 & !BUSAK & MREQ
+  # !A5 & !BUSAK & MREQ
+  # IORQ & MREQ & !RD
+  # A7 & MREQ & !RD
+  # !A6 & MREQ & !RD
+  # !A5 & MREQ & !RD
+
+IOSEL =>
+    !M1
+  # !A5
+  # !A6
+  # A7
+  # !IORQ
+
+NAND1 =>
+    !M1
+  # !A5
+  # !A6
+  # A7
+
+NAND2 =>
+    !M1
+  # !BUSAK
+  # !RD
+
+NMI =>
+    B_NMI
+
+DATA_DIR.oe  =>
+    1 
+
+IOSEL.oe  =>
+    1 
+
+NMI.oe  =>
+    1 
+
+%END

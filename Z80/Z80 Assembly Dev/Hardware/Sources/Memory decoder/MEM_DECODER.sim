@@ -1,0 +1,38 @@
+%SIGNAL
+PIN   6 =  A13 
+PIN   7 =  A14 
+PIN   8 =  A15 
+PIN   1 =  CLK 
+PIN  20 =  CS_FLASH 
+PIN  19 =  CS_RAM 
+PIN  10 =  FLASH 
+PIN  21 =  MEMRD 
+PIN  22 =  MEMWR 
+PIN   4 =  MREQ 
+PIN   3 =  RD 
+PIN   2 =  WR 
+%END
+
+%FIELD
+%END
+
+%EQUATION
+CS_FLASH =>
+    A15
+  # A13
+  # A14
+  # MREQ
+
+CS_RAM =>
+    !A13 & !A14 & !A15
+  # MREQ
+
+MEMRD =>
+    MREQ
+  # RD
+
+MEMWR =>
+    MREQ
+  # WR
+
+%END

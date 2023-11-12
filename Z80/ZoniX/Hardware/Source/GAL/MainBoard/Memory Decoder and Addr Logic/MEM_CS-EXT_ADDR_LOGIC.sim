@@ -1,0 +1,61 @@
+%SIGNAL
+PIN   7 =  A1 
+PIN   9 =  A14 
+PIN  10 =  A15 
+PIN  20 =  A15_RAM 
+PIN  19 =  A16_RAM 
+PIN  18 =  A17_RAM 
+PIN  17 =  A18_RAM 
+PIN   8 =  A2 
+PIN   2 =  CFG_Q0 
+PIN   3 =  CFG_Q1 
+PIN   4 =  CFG_Q2 
+PIN   5 =  CFG_Q3 
+PIN   1 =  CLK 
+PIN   6 =  CS_CFG 
+PIN  22 =  CS_CFG1 
+PIN  21 =  CS_CFG2 
+PIN  15 =  CS_RAM 
+PIN  14 =  CS_ROM 
+PIN  13 =  MREQ 
+PIN  11 =  ROM_EN 
+%END
+
+%FIELD
+%END
+
+%EQUATION
+A15_RAM =>
+    A15
+
+CS_CFG1 =>
+    !A1 & !A2 & !CS_CFG
+
+CS_CFG2 =>
+    !A1 & A2 & !CS_CFG
+
+CS_RAM =>
+    !A15 & !ROM_EN
+  # MREQ
+
+CS_ROM =>
+    A15
+  # ROM_EN
+  # MREQ
+
+A15_RAM.oe  =>
+    1 
+
+CS_CFG1.oe  =>
+    1 
+
+CS_CFG2.oe  =>
+    1 
+
+CS_RAM.oe  =>
+    1 
+
+CS_ROM.oe  =>
+    1 
+
+%END
