@@ -1,0 +1,229 @@
+     1                                  ;### Code by Dominic Emond-Belanger
+     2                                  ;### Using the NASM Assembler
+     3                                  ;
+     4                                  ; *physical memory map*
+     5                                  ;-----------------------
+     6                                  ;-    ROM  (0.5 MB)    -
+     7                                  ;-   0x80000-0xFFFFF   -
+     8                                  ;-----------------------
+     9                                  ;-    RAM  (0.5 MB)    -
+    10                                  ;-   0x00000-0x7FFFF   -
+    11                                  ;-----------------------
+    12                                  ;
+    13                                  
+    14                                  CPU 286
+    15                                  BITS 16
+    16                                  
+    17 00000000 FF<rep 80000h>          TIMES 0x80000-($-$$) DB 0xFF					;Fill bottom half of ROM with zeros.
+    18                                  
+    19                                  section .data
+    20                                  
+    21                                  ; ****** Definitions *****************************
+    22                                  
+    23                                  ; **** Define the verbose output level for debuging ****
+    24                                  
+    25                                  ; Level definisions :
+    26                                  ; 0x0 = No verbose output
+    27                                  ; 0x1 = Information only
+    28                                  ; 0x2 = Information + Warning
+    29                                  ; 0x3 = Information + Warning + debug
+    30                                  
+    31                                  	%define		Verbose_lvl		0x3			; Set verbose message level
+    32                                  
+    33                                  ; **** Define OnBoard devices ****
+    34                                  
+    35                                  	%define		PPI1_PRESENT
+    36                                  	%define		PPI2_PRESENT
+    37                                  	%define		VIA1_PRESENT
+    38                                  	%define		VFD_PRESENT	
+    39                                  	%define		NANO_PRESENT
+    40                                  
+    41                                  ; ****** DEVICES ADDRESS ***************************
+    42                                  
+    43                                  	LEDBAR			equ		0xDE			; Onboard LED Bargraph address
+    44                                  
+    45                                  	DIP_SWITCH		equ		0xDC			; Onboard DIP Switches address
+    46                                  	
+    47                                  	PPI1_PORTA		equ		0xE0			; Onboard PPI 1 Port A address
+    48                                  	PPI1_PORTB		equ		0xE2			; Onboard PPI 1 Port B address
+    49                                  	PPI1_PORTC		equ		0xE4			; Onboard PPI 1 Port C address
+    50                                  	PPI1_CTL		equ		0xE6			; Onboard PPI 1 Control Port address
+    51                                  
+    52                                  	PPI2_PORTA		equ		0xE8			; Onboard PPI 2 Port A address
+    53                                  	PPI2_PORTB		equ		0xEC			; Onboard PPI 2 Port B address
+    54                                  	PPI2_PORTC		equ		0xEE			; Onboard PPI 2 Port C address
+    55                                  	PPI2_CTL		equ		0xF0			; Onboard PPI 2 Control Port address
+    56                                  
+    57                                  	VIA1_PORTA		equ		0xF2			; Onboard VIA 1 Port A address
+    58                                  	VIA1_PORTB		equ		0xF4			; Onboard VIA 1 Port B address
+    59                                  	VIA1_DDRA		equ		0xF6			; Configure VIA 1 Port A
+    60                                  	VIA1_DDRB		equ		0xF8			; Configure VIA 1 Port B
+    61                                  	VIA1_IER		equ		0xFA			; Configure VIA 1 interrupt information
+    62                                  
+    63                                  ; ****** VARIABLES **********************************
+    64                                  
+    65                                  	; PPI Configuration
+    66                                  	PPI_CTL_PA_IN	equ	0b10010000			; 0x90
+    67                                  	PPI_CTL_PA_OUT	equ	0b10000000			; 0x80
+    68                                  
+    69                                  	; VFD Configuration
+    70                                  	VFD_RS	equ 0b00000001
+    71                                  	VFD_RW	equ 0b00000010
+    72                                  	VFD_RD	equ 0b00000100
+    73                                  
+    74                                  	; SPI Configuration
+    75                                  	SPI_MISO		equ		0b00000001
+    76                                  	SPI_MOSI		equ		0b00000010
+    77                                  	SPI_CLK			equ		0b00000100
+    78                                  
+    79                                  	SPI_CS1			equ		0b10000000			; 8-digit 7-segment display						Arduino Nano serial output
+    80                                  	SPI_CS2			equ		0b01000000			; N/A											N/A
+    81                                  	SPI_CS3			equ		0b00100000			; N/A											N/A
+    82                                  	SPI_CS4			equ		0b00010000			; N/A											N/A
+    83                                  	SPI_CS5			equ		0b00001000			; N/A											N/A
+    84                                  
+    85                                  global _start
+    86                                  
+    87                                  section .text start=0x80000					; Start at 0x80000
+    88                                  
+    89                                  _start:										; Physically at 0x80000 in ROM
+    90                                  
+    91                                  ;*** SETUP REGISTERS **********************************
+    92 00080000 B80000                  mov	ax,	0x0
+    93 00080003 8ED8                    mov	ds,	ax									; data segment
+    94 00080005 8EC0                    mov	es,	ax									; extra segment
+    95 00080007 89C4                    mov	sp,	ax									; Start at 0, will wrap around to FFFE
+    96 00080009 B84000                  mov ax, 0x0040								; First 1k is reserved for interupt vector table.
+    97 0008000C 8ED0                    mov	ss,	ax									; stack segment
+    98                                  ;*** /SETUP REGISTERS *********************************
+    99                                  
+   100 0008000E FA                      cli											;disable interrupts
+   101                                  
+   102 0008000F E82E00                  call	_vfd_init
+   103                                  
+   104 00080012 B048                    mov al, 'H'
+   105 00080014 E86100                  call _print_char
+   106 00080017 B045                    mov al, 'E'
+   107 00080019 E85C00                  call _print_char
+   108 0008001C B04C                    mov al, 'L'
+   109 0008001E E85700                  call _print_char
+   110 00080021 B04C                    mov al, 'L'
+   111 00080023 E85200                  call _print_char
+   112 00080026 B04F                    mov al, 'O'
+   113 00080028 E84D00                  call _print_char
+   114 0008002B B021                    mov al, '!'
+   115 0008002D E84800                  call _print_char
+   116                                  
+   117 00080030 BB[9300]                mov		bx, str_booting
+   118 00080033 E82A00                  call	_print_msg_vfd
+   119                                  
+   120 00080036 F4                      hlt											; Halt the computer
+   121 00080037 F4                      hlt											; Halt the computer
+   122 00080038 F4                      hlt											; Halt the computer
+   123                                  
+   124                                  ; ****** Functions *********************************
+   125                                  
+   126                                  section .text
+   127                                  
+   128                                  ppi_ctl_set:
+   129 00080039 52                      	push	dx								; Save DX to the stack
+   130 0008003A BAE600                  	mov		dx,	PPI1_CTL					; Send the device address to DX
+   131 0008003D EE                      	out		dx,	al							; Output AL to the device address
+   132                                  
+   133 0008003E 5A                      	pop		dx								; Restore DX from the stack
+   134 0008003F C3                      	ret										; Return to caller
+   135                                  
+   136                                  _vfd_init:
+   137 00080040 52                      	push	dx								; Save DX to the stack
+   138 00080041 BAE600                  	MOV		DX, PPI1_CTL
+   139 00080044 B080                    	MOV		AL,	0b10000000					;to make all ports output
+   140 00080046 EE                      	OUT		DX,	AL 
+   141                                  
+   142 00080047 B00C                    	mov		al, 0x0C						; Clear the vfd
+   143 00080049 E80200                  	call	_vfd_cmd_wr
+   144 0008004C 5A                      	pop		dx								; Restore DX from the stack
+   145 0008004D C3                      	ret
+   146                                  
+   147                                  _vfd_cmd_wr:
+   148 0008004E 52                      	push	dx
+   149 0008004F BAE000                  	mov		dx,	PPI1_PORTA
+   150 00080052 EE                      	out		dx,	al
+   151 00080053 BAE200                  	mov		dx,	PPI1_PORTB
+   152 00080056 B002                    	mov		al, VFD_RW
+   153 00080058 EE                      	out		dx,	al
+   154 00080059 90                      	nop
+   155 0008005A 90                      	nop
+   156 0008005B B000                    	mov		al, 0x0
+   157 0008005D EE                      	out		dx, al
+   158 0008005E 5A                      	pop		dx
+   159 0008005F C3                      	ret										; Return to caller
+   160                                  
+   161                                  _print_msg_vfd:
+   162 00080060 53                      	push	bx 								; Save BX 
+   163 00080061 51                      	push	cx 								; and CX onto the sack
+   164 00080062 89D9                    	mov		cx, bx 							; Save contents of BX for later use
+   165                                  	
+   166                                  	.loop:
+   167 00080064 268A07                  		mov		al, es:[bx]					; Read byte from [DS:BX]
+   168 00080067 08C0                    		or		al, al 						; Did we encounter a NUL character?
+   169 00080069 7406                    		jz		.return 					; If so, return to the caller
+   170 0008006B E80A00                  		call	_print_char 				; call our character print routine
+   171 0008006E 43                      		inc		bx 							; Increment the index
+   172 0008006F EBF3                    		jmp		.loop 						; And loop back
+   173                                  	
+   174                                  	.return: 
+   175 00080071 29CB                    		sub		bx, cx 						; Calculate our number of characters printed
+   176 00080073 89D8                    		mov		ax, bx 						; And load the result into AX
+   177 00080075 59                      		pop		cx 							; Restore CX
+   178 00080076 5B                      		pop		bx 							; and BX from the stack
+   179 00080077 C3                      		ret									; Return to caller
+   180                                  
+   181                                  _print_char:
+   182 00080078 52                      	push	dx
+   183 00080079 50                      	push	ax
+   184                                  
+   185 0008007A BAE000                  	mov		dx,		PPI1_PORTA				; Get A port address
+   186 0008007D EE                      	out		dx,		al						; Write data (e.g. char) to port A
+   187 0008007E B003                    	mov		al,		(VFD_RS | VFD_RW)		; RS=1, RW=1, RD=0
+   188 00080080 BAE200                  	mov		dx,		PPI1_PORTB				; Get B port address
+   189 00080083 EE                      	out		dx,		al						; Write to port B - enable high
+   190 00080084 90                      	nop										; wait for high-to-low pulse to be wide enough
+   191 00080085 90                      	nop
+   192 00080086 B001                    	mov		al,		VFD_RS					; RS=1, RW=0, RD=0
+   193 00080088 EE                      	out		dx,		al						; Write to port B - enable low
+   194                                  
+   195 00080089 58                      	pop		ax								; Restore AX from the satck
+   196 0008008A 5A                      	pop		dx								; Restore DX from the satck
+   197 0008008B C3                      	ret										; Return to caller
+   198                                  
+   199                                  _ledbar_out:
+   200 0008008C 52                      	push	dx 								; Save DX
+   201 0008008D BADE00                  	mov		dx, LEDBAR 						; Send LEDBAR address to DX
+   202 00080090 EE                      	out		dx, al 							; Output AL value to to LEDBAR device
+   203 00080091 5A                      	pop		dx 								; Restore DX from the stack
+   204 00080092 C3                      	ret										; Return to caller
+   205                                  
+   206                                  ;section .rodata start=0x30000
+   207                                  
+   208                                  ; ****** STRINGS ************************************
+   209                                  
+   210 00080093 53797374656D20426F-     	str_booting							db	"System Booting...", 0x0
+   210 0008009C 6F74696E672E2E2E00 
+   211 000800A5 4C6F6164696E672E2E-     	str_loading							db	"Loading...", 0x0
+   211 000800AE 2E00               
+   212 000800B0 42494F532075706461-     	str_update_bios						db	"BIOS update in progress...", 0x0
+   212 000800B9 746520696E2070726F-
+   212 000800C2 67726573732E2E2E00 
+   213 000800CB 42494F532075706461-     	str_update_bios_completed			db	"BIOS update completed!", 0x0
+   213 000800D4 746520636F6D706C65-
+   213 000800DD 7465642100         
+   214                                  
+   215                                  ;************************************************************************
+   216                                  
+   217 000800E2 FF<rep 7FF0Eh>          TIMES 0xFFFF0-($-$$) db 0xff				; Fill ROM with 0xFF up to startup address
+   218                                  											; This will get to 0xFFFF0
+   219                                  section .bootvector
+   220                                  	_reset:									; 0xFFFF0	*Processor starts reading here
+   221 00000000 EA00000080              		JMP 0x8000:0x0						; EA	00 00 00 80		Jump to TOP: label
+   222                                  
+   223 00000005 FF<rep Bh>              TIMES 0x10-($-$$) DB 0xff					; Fill the rest of ROM with bytes of 0xFF
