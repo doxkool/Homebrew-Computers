@@ -1,4 +1,4 @@
-# Homebrew 80286 computer v0.6
+# Homebrew 80286 computer v0.1
 
 This is the repo for my homebrew 80286 hobbyist computer. This is only to keep track of my work and is not meant to be a well documented project at this stage.
 
