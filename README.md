@@ -1,3 +1,2 @@
 # Homebrew Computers
-
-Please look the most recent branch to see the files.
+All my homebrew computer projects in one place!
