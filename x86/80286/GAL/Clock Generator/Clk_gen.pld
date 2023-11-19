@@ -1,28 +1,28 @@
 Name     80286_Clk_Gen;
 PartNo   N/A;
-Date     23-April-2023;
-Revision 01;
+Date     19-November-2023;
+Revision 02;
 Designer Dominic Emond-Belanger;
 Company  N/A;
-Assembly Intel 286;
+Assembly Intel 80286;
 Location TBD;
 Device   g20v8a;
 
 
-/************ Intel 80286 decode logic ******************
+/************ Intel 80286 Clock Generator ******************
  *                 ______________
  *                |Memory Decoder|
  *        CLK x---|1  I        24|---x Vcc
- *         S0 x---|2  I      I 23|---x N/A
- *         S1 x---|3  I      O 22|---x ROM_OE
- *        MIO x---|4  I      O 21|---x RAM_OE
- *    CODINTA x---|5  I      O 20|---x RAM_WE
- *        BHE x---|6  I      O 19|---x IO_WE
- *        A19 x---|7  I      O 18|---x N/A
- *       MRDC x---|8  I      O 17|---x N/A
- *       MWTC x---|9  I      O 16|---x ROM_LED
- *         A1 x---|10 I      O 15|---x RAM_LED
- *         A2 x---|11 I      I 14|---x N/A
+ *        EFI x---|2  I      I 23|---x N/A
+ *         FC x---|3  I      O 22|---x CLK1
+ *        !S0 x---|4  I      O 21|---x PCLK
+ *        !S1 x---|5  I      O 20|---x !READY
+ *        N/A x---|6  I      O 19|---x b_PCLK
+ *        N/A x---|7  I      O 18|---x N/A
+ *        N/A x---|8  I      O 17|---x N/A
+ *        N/A x---|9  I      O 16|---x N/A
+ *         X1 x---|10 I      O 15|---x RESET
+ *         X2 x---|11 I      I 14|---x !RES
  *        GND x---|12        I 13|---x GND
  *                |______________|
  *
@@ -31,32 +31,25 @@ Device   g20v8a;
 /*** Inputs ***/
 PIN 1		= CLK;
 PIN 2		= EFI;
-/*PIN 3	= S1;
-PIN 4		= MIO;
-PIN 5		= CODINTA;                 
-PIN 6		= BHE;
-PIN 7		= A19;
-PIN 8		= MRDC;
-PIN 9		= MWTC;
-PIN 10		= A1;
-PIN 11		= A2;*/
+PIN 3		= FC;
 PIN 14		= !RES;
 
 /*** Outputs ***/
 PIN 15		= RESET;
-/*PIN 16	= ROM_LED;
-PIN 19		= IO_WE;*/
-PIN 20		= b_PCLK;
-PIN 21 	= PCLK;
-PIN 22		= CLK_CPU;
+PIN 19		= b_PCLK;
+PIN 20		= !READY;
+PIN 21 		= PCLK;
+PIN 22		= CLK1;
 
 /*** Logic Equations ***/
 
-CLK_CPU 	= CLK;
+X1 		= !X2;
+
+CLK1 		= CLK;
 
 RESET 		= RES;
 
-!PCLK.d	= b_PCLK;
+!PCLK.d		= b_PCLK;
 !b_PCLK.d	= PCLK;
 
 
